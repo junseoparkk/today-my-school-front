@@ -136,7 +136,7 @@ class ReservationStatusCard extends StatefulWidget {
   final String location;
   final int maxCapacity;
   final String image;
-  List<bool> isAvailable;
+  List isAvailable;
   final int index;
 
   ReservationStatusCard({
