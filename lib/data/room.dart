@@ -7,6 +7,7 @@ class Room {
   final int maxCapacity;
   final List? facilities;
   final String image;
+  final List<Map> isAvailable;
 
   Room({
     required this.roomId,
@@ -17,6 +18,7 @@ class Room {
     required this.maxCapacity,
     this.facilities,
     required this.image,
+    required this.isAvailable,
   });
 }
 
@@ -30,6 +32,17 @@ List<Room> rooms = [
     maxCapacity: 10,
     facilities: ['LED TV', 'PC', '화이트보드'],
     image: 'assets/images/sample.jpg',
+    isAvailable: [
+      {'time': '09:00-10:00', 'isReserved': true},
+      {'time': '10:00-11:00', 'isReserved': true},
+      {'time': '11:00-12:00', 'isReserved': false},
+      {'time': '12:00-13:00', 'isReserved': true},
+      {'time': '13:00-14:00', 'isReserved': true},
+      {'time': '14:00-15:00', 'isReserved': true},
+      {'time': '15:00-16:00', 'isReserved': false},
+      {'time': '16:00-17:00', 'isReserved': false},
+      {'time': '17:00-18:00', 'isReserved': true},
+    ],
   ),
   Room(
     roomId: 2,
@@ -40,6 +53,17 @@ List<Room> rooms = [
     maxCapacity: 4,
     facilities: ['LED TV', 'PC', '화이트보드'],
     image: 'assets/images/sample.jpg',
+    isAvailable: [
+      {'time': '09:00-10:00', 'isReserved': true},
+      {'time': '10:00-11:00', 'isReserved': true},
+      {'time': '11:00-12:00', 'isReserved': false},
+      {'time': '12:00-13:00', 'isReserved': true},
+      {'time': '13:00-14:00', 'isReserved': true},
+      {'time': '14:00-15:00', 'isReserved': true},
+      {'time': '15:00-16:00', 'isReserved': false},
+      {'time': '16:00-17:00', 'isReserved': false},
+      {'time': '17:00-18:00', 'isReserved': true},
+    ],
   ),
   Room(
     roomId: 3,
@@ -50,6 +74,17 @@ List<Room> rooms = [
     maxCapacity: 4,
     facilities: ['LED TV', 'PC', '화이트보드'],
     image: 'assets/images/sample.jpg',
+    isAvailable: [
+      {'time': '09:00-10:00', 'isReserved': true},
+      {'time': '10:00-11:00', 'isReserved': true},
+      {'time': '11:00-12:00', 'isReserved': false},
+      {'time': '12:00-13:00', 'isReserved': true},
+      {'time': '13:00-14:00', 'isReserved': true},
+      {'time': '14:00-15:00', 'isReserved': true},
+      {'time': '15:00-16:00', 'isReserved': false},
+      {'time': '16:00-17:00', 'isReserved': false},
+      {'time': '17:00-18:00', 'isReserved': true},
+    ],
   ),
   Room(
     roomId: 4,
@@ -60,6 +95,17 @@ List<Room> rooms = [
     maxCapacity: 4,
     facilities: ['LED TV', 'PC', '화이트보드'],
     image: 'assets/images/sample.jpg',
+    isAvailable: [
+      {'time': '09:00-10:00', 'isReserved': true},
+      {'time': '10:00-11:00', 'isReserved': true},
+      {'time': '11:00-12:00', 'isReserved': false},
+      {'time': '12:00-13:00', 'isReserved': true},
+      {'time': '13:00-14:00', 'isReserved': true},
+      {'time': '14:00-15:00', 'isReserved': true},
+      {'time': '15:00-16:00', 'isReserved': false},
+      {'time': '16:00-17:00', 'isReserved': false},
+      {'time': '17:00-18:00', 'isReserved': true},
+    ],
   ),
   Room(
     roomId: 5,
@@ -69,6 +115,17 @@ List<Room> rooms = [
     maxTime: 2,
     maxCapacity: 4,
     image: 'assets/images/sample.jpg',
+    isAvailable: [
+      {'time': '09:00-10:00', 'isReserved': true},
+      {'time': '10:00-11:00', 'isReserved': true},
+      {'time': '11:00-12:00', 'isReserved': false},
+      {'time': '12:00-13:00', 'isReserved': true},
+      {'time': '13:00-14:00', 'isReserved': true},
+      {'time': '14:00-15:00', 'isReserved': true},
+      {'time': '15:00-16:00', 'isReserved': false},
+      {'time': '16:00-17:00', 'isReserved': false},
+      {'time': '17:00-18:00', 'isReserved': true},
+    ],
   ),
   Room(
     roomId: 6,
@@ -78,6 +135,17 @@ List<Room> rooms = [
     maxTime: 2,
     maxCapacity: 4,
     image: 'assets/images/sample.jpg',
+    isAvailable: [
+      {'time': '09:00-10:00', 'isReserved': true},
+      {'time': '10:00-11:00', 'isReserved': true},
+      {'time': '11:00-12:00', 'isReserved': false},
+      {'time': '12:00-13:00', 'isReserved': true},
+      {'time': '13:00-14:00', 'isReserved': true},
+      {'time': '14:00-15:00', 'isReserved': true},
+      {'time': '15:00-16:00', 'isReserved': false},
+      {'time': '16:00-17:00', 'isReserved': false},
+      {'time': '17:00-18:00', 'isReserved': true},
+    ],
   ),
   Room(
     roomId: 7,
@@ -87,6 +155,17 @@ List<Room> rooms = [
     maxTime: 8,
     maxCapacity: 4,
     image: 'assets/images/sample.jpg',
+    isAvailable: [
+      {'time': '09:00-10:00', 'isReserved': true},
+      {'time': '10:00-11:00', 'isReserved': true},
+      {'time': '11:00-12:00', 'isReserved': false},
+      {'time': '12:00-13:00', 'isReserved': true},
+      {'time': '13:00-14:00', 'isReserved': true},
+      {'time': '14:00-15:00', 'isReserved': true},
+      {'time': '15:00-16:00', 'isReserved': false},
+      {'time': '16:00-17:00', 'isReserved': false},
+      {'time': '17:00-18:00', 'isReserved': true},
+    ],
   ),
   Room(
     roomId: 8,
@@ -96,6 +175,17 @@ List<Room> rooms = [
     maxTime: 2,
     maxCapacity: 4,
     image: 'assets/images/sample.jpg',
+    isAvailable: [
+      {'time': '09:00-10:00', 'isReserved': true},
+      {'time': '10:00-11:00', 'isReserved': true},
+      {'time': '11:00-12:00', 'isReserved': false},
+      {'time': '12:00-13:00', 'isReserved': true},
+      {'time': '13:00-14:00', 'isReserved': true},
+      {'time': '14:00-15:00', 'isReserved': true},
+      {'time': '15:00-16:00', 'isReserved': false},
+      {'time': '16:00-17:00', 'isReserved': false},
+      {'time': '17:00-18:00', 'isReserved': true},
+    ],
   ),
   Room(
     roomId: 9,
@@ -105,5 +195,16 @@ List<Room> rooms = [
     maxTime: 2,
     maxCapacity: 4,
     image: 'assets/images/sample.jpg',
+    isAvailable: [
+      {'time': '09:00-10:00', 'isReserved': true},
+      {'time': '10:00-11:00', 'isReserved': true},
+      {'time': '11:00-12:00', 'isReserved': false},
+      {'time': '12:00-13:00', 'isReserved': true},
+      {'time': '13:00-14:00', 'isReserved': true},
+      {'time': '14:00-15:00', 'isReserved': true},
+      {'time': '15:00-16:00', 'isReserved': false},
+      {'time': '16:00-17:00', 'isReserved': false},
+      {'time': '17:00-18:00', 'isReserved': true},
+    ],
   ),
 ];
