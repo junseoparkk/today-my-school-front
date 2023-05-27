@@ -33,7 +33,7 @@ class _ReservationFormState extends State<ReservationForm> {
         .then(
       (snapshot) {
         if (snapshot.exists) {
-          if(this.mounted){
+          if(mounted){
             setState(() {
               name = snapshot.data()!['name'];
               phone = snapshot.data()!['phone'];
@@ -43,6 +43,7 @@ class _ReservationFormState extends State<ReservationForm> {
         }
       },
     );
+    return 'success';
   }
 
   @override
@@ -71,12 +72,14 @@ class _ReservationFormState extends State<ReservationForm> {
           title: const Text('예약 정보 입력'),
         ),
 
-        body: Builder(
-          builder: (context) {
-            final reserveField = Provider.of<ReserveFieldModel>(context, listen: false);
-            reserveField.place = widget.room!.place;
-            reserveField.roomId = widget.room!.roomId;
-            if(phone.isNotEmpty){
+        body: FutureBuilder(
+          future: _getUser(),
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            // final reserveField = Provider.of<ReserveFieldModel>(context, listen: false);
+            // reserveField.place = widget.room!.place;
+            // reserveField.roomId = widget.room!.roomId;
+            //if(phone.isNotEmpty)
+            if(snapshot.hasData){
               return SafeArea(
                 bottom: false,
                 child: Center(

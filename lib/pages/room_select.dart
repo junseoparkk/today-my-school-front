@@ -122,6 +122,7 @@ class _RoomSelectPageState extends State<RoomSelectPage> {
                       ),
                     ),
                   ],
+                ),
               ),
             ],
           ),
