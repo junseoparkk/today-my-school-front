@@ -22,6 +22,11 @@ class TextStyleSet {
     fontWeight: FontWeight.w300,
     color: ColorPalette.black,
   );
+  static final light18 = TextStyle(
+    fontSize: 18.sp,
+    fontWeight: FontWeight.w300,
+    color: ColorPalette.black,
+  );
   static final regular13 = TextStyle(
     fontSize: 13.sp,
     fontWeight: FontWeight.w400,
@@ -97,4 +102,5 @@ class ColorPalette {
   static const blue = Color(0xFF1D2F6C);
   static const red = Color(0xFFC10000);
   static const green = Color(0xFFA8FB3F);
+
 }

@@ -49,9 +49,10 @@ class _ReservationFormState extends State<ReservationForm> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _getUser();
-    });
+    // 원본엔 없음
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   _getUser();
+    // });
   }
 
   @override
@@ -125,61 +126,16 @@ class _ReservationFormState extends State<ReservationForm> {
                                 children: [
                                   const InputGuide(),
                                   SizedBox(height: 16.h),
-                                  Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsets.fromLTRB(
-                                            8.w, 0, 0, 22.h),
-                                        child: Text(
-                                          "이름",
-                                          style: TextStyleSet.light13,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 192.w,
-                                        height: 40.h,
-                                        child: Text(
-                                          name,
-                                          style: TextStyleSet.regular15,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  //이름
-                                  Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsets.fromLTRB(
-                                            8.w, 0, 0, 22.h),
-                                        child: Text(
-                                          "연락처",
-                                          style: TextStyleSet.light13,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 192.w,
-                                        height: 40.h,
-                                        child: Text(
-                                          '${_ReservationFormState.phone.substring(0, 3)}-${_ReservationFormState.phone.substring(3, 7)}-${_ReservationFormState.phone.substring(7)}',
-                                          style: TextStyleSet.regular15,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  // const NameDisplay(),
-                                  // const PhoneDisplay(),
+                                  const NameDisplay(),
+                                  const PhoneDisplay(),
                                   /*DateDisplay(),
                                 TimeDisplay(),*/
-                                  const NumOfPeopleInput(),
+                                  NumOfPeopleInput(room: widget.room),
                                   const PurposeInput(),
                                 ],
                               ),
                             ),
-                            const ReserveButton(),
+                            ReserveButton(room: widget.room),
                             SizedBox(height: 40.h),
                           ],
                         ),
@@ -188,9 +144,10 @@ class _ReservationFormState extends State<ReservationForm> {
                   ),
                 ),
               );
-            }else{
-             return Center(child: CircularProgressIndicator());
             }
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
           },
         ),
       ),
@@ -279,6 +236,12 @@ class _DatePickerState extends State<DatePicker> {
     final reserveField = Provider.of<ReserveFieldModel>(context, listen: false);
     return ExpansionTile(
       title: const Text('날짜'),
+      tilePadding: EdgeInsets.symmetric(horizontal: 24.h),
+      childrenPadding: EdgeInsets.fromLTRB(32.h, 0, 32.h, 16.h),
+      iconColor: ColorPalette.black,
+      collapsedIconColor: ColorPalette.black,
+      textColor: ColorPalette.black,
+      collapsedTextColor: ColorPalette.black,
       children: [
         TableCalendar(
           locale: 'ko_KR',
@@ -307,24 +270,49 @@ class _DatePickerState extends State<DatePicker> {
               day.year == selectedDay.year &&
               day.month == selectedDay.month &&
               day.day == selectedDay.day,
-          headerStyle: const HeaderStyle(
+          headerStyle: HeaderStyle(
             titleCentered: true,
             formatButtonVisible: false,
+            titleTextStyle: TextStyleSet.regular18,
+            headerPadding: const EdgeInsets.only(top: 0),
+            leftChevronIcon: const Icon(
+              Icons.chevron_left_rounded,
+              size: 24,
+              color: ColorPalette.black,
+            ),
+            rightChevronIcon: const Icon(
+              Icons.chevron_right_rounded,
+              size: 24,
+              color: ColorPalette.black,
+            ),
+          ),
+          daysOfWeekHeight: 24.h,
+          daysOfWeekStyle: DaysOfWeekStyle(
+            weekdayStyle: TextStyleSet.light15,
+            weekendStyle:
+            TextStyleSet.light15.copyWith(color: ColorPalette.grey),
           ),
           calendarStyle: CalendarStyle(
-              todayTextStyle: const TextStyle(color: ColorPalette.black),
-              todayDecoration: BoxDecoration(
-                color: ColorPalette.blue.withOpacity(0.3),
-                shape: BoxShape.circle,
-              ),
-              selectedTextStyle: const TextStyle(color: ColorPalette.white),
-              selectedDecoration: const BoxDecoration(
-                color: ColorPalette.blue,
-                shape: BoxShape.circle,
-              ),
-              outsideTextStyle: const TextStyle(color: ColorPalette.grey),
-              disabledTextStyle: const TextStyle(color: ColorPalette.grey),
-              defaultTextStyle: const TextStyle(color: ColorPalette.black)),
+            cellMargin: const EdgeInsets.all(0),
+            todayTextStyle: TextStyleSet.regular18,
+            todayDecoration: BoxDecoration(
+              color: ColorPalette.blue.withOpacity(0.15),
+              shape: BoxShape.circle,
+            ),
+            selectedTextStyle:
+            TextStyleSet.medium18.copyWith(color: ColorPalette.white),
+            selectedDecoration: const BoxDecoration(
+              color: ColorPalette.blue,
+              shape: BoxShape.circle,
+            ),
+            outsideTextStyle:
+            TextStyleSet.light18.copyWith(color: ColorPalette.grey),
+            disabledTextStyle:
+            TextStyleSet.light18.copyWith(color: ColorPalette.grey),
+            weekendTextStyle:
+            TextStyleSet.light18.copyWith(color: ColorPalette.grey),
+            defaultTextStyle: TextStyleSet.regular18,
+          ),
         )
       ],
     );
@@ -463,7 +451,7 @@ class NameDisplay extends StatelessWidget {
               isDense: true,
               contentPadding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
               filled: true,
-              fillColor: ColorPalette.lightGrey.withOpacity(0.2),
+              fillColor: ColorPalette.lightGrey.withOpacity(0.15),
               disabledBorder: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(5)),
                 borderSide: BorderSide(
@@ -678,7 +666,9 @@ class TimeDisplay extends StatelessWidget {
 */
 
 class NumOfPeopleInput extends StatelessWidget {
-  const NumOfPeopleInput({super.key});
+  const NumOfPeopleInput({super.key,this.room});
+
+  final Room? room;
 
   @override
   Widget build(BuildContext context) {
