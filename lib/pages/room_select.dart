@@ -226,12 +226,12 @@ class _ReservationStatusCardState extends State<ReservationStatusCard> {
                 },
                 itemCount: widget.isAvailable.length,
                 itemBuilder: (context, index) {
-                  if (widget.isAvailable[index]) {
+                  if (widget.isAvailable[index]['isReserved']) {
                     return Container(
                       width: 28.w,
                       height: 4.h,
-                      decoration: const BoxDecoration(
-                        color: ColorPalette.green,
+                      decoration: BoxDecoration(
+                        color: ColorPalette.grey.withOpacity(0.7),
                       ),
                     );
                   }
@@ -239,7 +239,7 @@ class _ReservationStatusCardState extends State<ReservationStatusCard> {
                     width: 28.w,
                     height: 4.h,
                     decoration: const BoxDecoration(
-                      color: ColorPalette.lightGrey,
+                      color: ColorPalette.green,
                     ),
                   );
                 },
