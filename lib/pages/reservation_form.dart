@@ -850,6 +850,7 @@ class ReserveButton extends StatelessWidget {
             _TimePickerState.selectedTime.sort();
             reserveField.setStartTime(_TimePickerState.selectedTime.first);
             reserveField.setEndTime(_TimePickerState.selectedTime.last);
+            reserveField.setRoomId(room!.roomId);
 
             await reservationServices.addReservation(
                 reserveField.roomId,
@@ -870,7 +871,8 @@ class ReserveButton extends StatelessWidget {
             )
                 .then(
                   (reservationStatus) {
-                if (reservationStatus == ReservationStatus.success) {
+                if (reservationStatus == ReservationStatus.success){
+
                   Navigator.of(context)
                       .pushReplacementNamed('/reservation_result');
                 } else {

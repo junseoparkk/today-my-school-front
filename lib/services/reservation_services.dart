@@ -30,10 +30,8 @@ class ReservationServices {
     //return Reservation2.fromMap(data);
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
-      print(response.statusCode);
       return Reservation2.fromMap(data);
     } else if(response.statusCode == 500){
-      print(response.statusCode);
       throw HttpException("예약 실패!");
     }
     else{
