@@ -283,8 +283,19 @@ class _DatePickerState extends State<DatePicker> {
         TableCalendar(
           locale: 'ko_KR',
           focusedDay: focusedDay,
-          firstDay: DateTime.utc(2023, 1, 1),
+          firstDay: DateTime.now(),
           lastDay: DateTime.utc(2024, 12, 31),
+          enabledDayPredicate: (day) {
+            if (day.isBefore(DateTime(
+              DateTime.now().add(const Duration(days: 7)).year,
+              DateTime.now().add(const Duration(days: 7)).month,
+              DateTime.now().add(const Duration(days: 7)).day,
+            ))) {
+              return true;
+            } else {
+              return false;
+            }
+          },
           onDaySelected: (selectedDay, focusedDay) {
             setState(() {
               this.selectedDay = selectedDay;
