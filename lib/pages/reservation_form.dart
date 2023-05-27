@@ -776,8 +776,8 @@ class ReserveButton extends StatelessWidget {
               await reservationServices.addReservation(
                   reserveField.roomId,
                   FirebaseAuth.instance.currentUser!.uid,
-                  "2023-06-03 12:00:00",
-                  "2023-06-03 13:00:00",
+                  "2023-06-03 15:00:00",
+                  "2023-06-03 16:00:00",
                   reserveField.purpose,
                   reserveField.numOfPeople);
 

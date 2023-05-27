@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 import 'package:today_my_school/data/room.dart';
 import 'package:today_my_school/pages/reservation_form.dart';
 import 'package:today_my_school/style.dart';
