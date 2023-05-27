@@ -13,6 +13,34 @@ class RoomSelectPage extends StatefulWidget {
 }
 
 class _RoomSelectPageState extends State<RoomSelectPage> {
+  String _selectedDate =
+      DateFormat('yyyy-MM-dd (E)', 'ko_KR').format(DateTime.now());
+
+  Future _selectDate() async{
+    final DateTime? selected = await showDatePicker(
+      context: context,
+      initialEntryMode: DatePickerEntryMode.calendarOnly,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime(2024,12,31),
+      selectableDayPredicate: (date){
+        if(date.isAfter(DateTime(
+          DateTime.now().add(const Duration(days: 6)).year,
+          DateTime.now().add(const Duration(days: 6)).month,
+          DateTime.now().add(const Duration(days: 6)).day,
+        ))) {
+          return false;
+        } else {
+          return true;
+        }
+      },
+    );
+    if (selected != null){
+      setState(() {
+        _selectedDate = DateFormat('yyyy-MM-dd (E)','ko_KR').format(selected);
+      });
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,35 +71,57 @@ class _RoomSelectPageState extends State<RoomSelectPage> {
                 ),
               ),
               Positioned(
-                child: ListView.separated(
-                  padding: EdgeInsets.symmetric(horizontal: 40.w),
-                  separatorBuilder: (context, index) {
-                    return SizedBox(
-                      height: 16.h,
-                    );
-                  },
-                  itemCount: rooms.length,
-                  itemBuilder: (context, index) {
-                    return ReservationStatusCard(
-                      place: rooms[index].place,
-                      location: rooms[index].location,
-                      maxCapacity: rooms[index].maxCapacity,
-                      image: rooms[index].image,
-                      isAvailable: const [
-                        true,
-                        true,
-                        false,
-                        false,
-                        true,
-                        true,
-                        true,
-                        false,
-                        true
-                      ],
-                      index: index,
-                    );
-                  },
-                ),
+                child: Column(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        _selectDate();
+                      },
+                      child: Container(
+                        width: 280.w,
+                        height: 32.h,
+                        margin: EdgeInsets.fromLTRB(0, 8.h, 0, 16.h),
+                        decoration: BoxDecoration(
+                          color: ColorPalette.white.withOpacity(0.7),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(
+                              Icons.calendar_month_rounded,
+                              size: 24,
+                            ),
+                            Text(
+                              ' $_selectedDate',
+                              style: TextStyleSet.medium15,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: ListView.separated(
+                        padding: EdgeInsets.symmetric(horizontal: 40.w),
+                        separatorBuilder: (context, index) {
+                          return SizedBox(
+                            height: 16.h,
+                          );
+                        },
+                        itemCount: rooms.length,
+                        itemBuilder: (context, index) {
+                          return ReservationStatusCard(
+                            place: rooms[index].place,
+                            location: rooms[index].location,
+                            maxCapacity: rooms[index].maxCapacity,
+                            image: rooms[index].image,
+                            isAvailable: rooms[index].isAvailable,
+                            index: index,
+                          );
+                        },
+                      ),
+                    ),
+                  ],
               ),
             ],
           ),
