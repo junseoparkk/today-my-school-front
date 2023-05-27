@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ReserveFieldModel extends ChangeNotifier {
   String place = '';
   DateTime date = DateTime.now();
-  DateTime startTime = DateTime.now();
-  DateTime endTime = DateTime.now();
+  String startTime = '';
+  String endTime = '';
   int numOfPeople = 0;
   String purpose = '';
   int roomId=0;
@@ -24,13 +25,17 @@ class ReserveFieldModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setStartTime(DateTime startTime) {
-    this.startTime = startTime;
+  void setStartTime(String startTime) {
+    String head = DateFormat('yyyy-MM-dd').format(date);
+    String tail = startTime.split('-')[0];
+    this.startTime = '$head $tail:00';
     notifyListeners();
   }
 
-  void setEndTime(DateTime endTime) {
-    this.endTime = endTime;
+  void setEndTime(String endTime) {
+    String head = DateFormat('yyyy-MM-dd').format(date);
+    String tail = endTime.split('-')[1];
+    this.endTime = '$head $tail:00';
     notifyListeners();
   }
 

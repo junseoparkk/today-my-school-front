@@ -15,9 +15,9 @@ class ReservationModel with ChangeNotifier {
 
   Future<ReservationStatus> reserveRoom(
     String place,
-    DateTime date,
-    DateTime startTime,
-    DateTime endTime,
+    DateTime? date,
+    String startTime,
+    String endTime,
     int numOfPeople,
     String purpose
   ) async {

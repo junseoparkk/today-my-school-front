@@ -110,7 +110,7 @@ class _ReservationFormState extends State<ReservationForm> {
                               height: 16.h,
                               color: ColorPalette.blue.withOpacity(0.05),
                             ),
-                            const TimePicker(),
+                            TimePicker(room: widget.room),
                             Container(
                               height: 16.h,
                               color: ColorPalette.blue.withOpacity(0.05),
@@ -290,13 +290,14 @@ class _DatePickerState extends State<DatePicker> {
               this.selectedDay = selectedDay;
               this.focusedDay = selectedDay;
             });
-            reserveField.date = selectedDay;
+            reserveField.setDate(selectedDay);
           },
           selectedDayPredicate: (day) =>
               day.year == selectedDay.year &&
               day.month == selectedDay.month &&
               day.day == selectedDay.day,
           headerStyle: const HeaderStyle(
+            titleCentered: true,
             formatButtonVisible: false,
           ),
           calendarStyle: CalendarStyle(
@@ -320,28 +321,87 @@ class _DatePickerState extends State<DatePicker> {
 }
 
 class TimePicker extends StatefulWidget {
-  const TimePicker({super.key});
+  const TimePicker({super.key,this.room});
+
+  final Room? room;
 
   @override
   State<TimePicker> createState() => _TimePickerState();
 }
 
 class _TimePickerState extends State<TimePicker> {
+  static List selectedTime = [];
+
   @override
   Widget build(BuildContext context) {
+    final reserveField = Provider.of<ReservationModel>(context, listen: false);
+
     return ExpansionTile(
       title: const Text('시간'),
+      tilePadding: EdgeInsets.symmetric(horizontal: 24.h),
+      childrenPadding: EdgeInsets.only(bottom: 16.h),
+      iconColor: ColorPalette.black,
+      collapsedIconColor: ColorPalette.black,
+      textColor: ColorPalette.black,
+      collapsedTextColor: ColorPalette.black,
       children: [
-        ListView.separated(
-          scrollDirection: Axis.horizontal,
-          separatorBuilder: (context, index) {
-            return SizedBox(width: 8.h);
-          },
-          itemCount: 10,
-          itemBuilder: (context, index) {
-            return;
-          },
-        )
+        SizedBox(
+          height: 36.h,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: widget.room!.isAvailable.length,
+            itemBuilder: (context, index) {
+              if (widget.room!.isAvailable[index]['isReserved']) {
+                return Container(
+                  width: 100.w,
+                  margin: EdgeInsets.symmetric(horizontal: 4.w),
+                  decoration: BoxDecoration(
+                    color: ColorPalette.grey.withOpacity(0.7),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: Center(
+                    child: Text(
+                      widget.room!.isAvailable[index]['time'],
+                      style: TextStyleSet.regular13
+                          .copyWith(color: ColorPalette.white),
+                    ),
+                  ),
+                );
+              }
+              return GestureDetector(
+                onTap: () {
+                  if (selectedTime
+                      .contains(widget.room!.isAvailable[index]['time'])) {
+                    selectedTime
+                        .remove(widget.room!.isAvailable[index]['time']);
+                    //print(selectedTime);
+                  } else if (selectedTime.length < 2) {
+                    selectedTime.add(widget.room!.isAvailable[index]['time']);
+                    //print(selectedTime);
+                  }
+                },
+                child: Container(
+                  width: 100.w,
+                  margin: EdgeInsets.symmetric(horizontal: 4.w),
+                  decoration: BoxDecoration(
+                    color: selectedTime
+                        .contains(widget.room!.isAvailable[index]['time'])
+                        ? ColorPalette.blue
+                        : ColorPalette.white,
+                    border: Border.all(color: ColorPalette.blue),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: Center(
+                    child: Text(
+                      widget.room!.isAvailable[index]['time'],
+                      style: TextStyleSet.regular13,
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
       ],
     );
   }
@@ -429,8 +489,9 @@ class PhoneDisplay extends StatelessWidget {
           width: 192.w,
           height: 64.h,
           child: TextFormField(
-            initialValue:
-                '${_ReservationFormState.phone.substring(0, 3)}-${_ReservationFormState.phone.substring(3, 7)}-${_ReservationFormState.phone.substring(7)}',
+            initialValue: _ReservationFormState.phone.isEmpty
+                ? ''
+                : '${_ReservationFormState.phone.substring(0, 3)}-${_ReservationFormState.phone.substring(3, 7)}-${_ReservationFormState.phone.substring(7)}',
             style: TextStyleSet.regular15,
             decoration: InputDecoration(
               helperText: '',
@@ -439,7 +500,7 @@ class PhoneDisplay extends StatelessWidget {
               isDense: true,
               contentPadding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
               filled: true,
-              fillColor: ColorPalette.lightGrey.withOpacity(0.2),
+              fillColor: ColorPalette.grey.withOpacity(0.15),
               disabledBorder: const OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(5)),
                 borderSide: BorderSide(
@@ -756,11 +817,13 @@ class PurposeInput extends StatelessWidget {
 }
 
 class ReserveButton extends StatelessWidget {
-  const ReserveButton({super.key});
+  const ReserveButton({super.key,this.room});
+
+  final Room? room;
 
   @override
   Widget build(BuildContext context) {
-    //final reservation = Provider.of<ReservationModel>(context, listen: false);
+    final reservation = Provider.of<ReservationModel>(context, listen: false);
     final reserveField = Provider.of<ReserveFieldModel>(context, listen: false);
     final ReservationServices reservationServices=ReservationServices();
     return SizedBox(
@@ -774,47 +837,50 @@ class ReserveButton extends StatelessWidget {
           ),
         ),
         onPressed: () async {
-          if (_ReservationFormState._formKey.currentState!.validate()) {
-            try {
-              await reservationServices.addReservation(
-                  reserveField.roomId,
-                  FirebaseAuth.instance.currentUser!.uid,
-                  "2023-06-03 15:00:00",
-                  "2023-06-03 16:00:00",
-                  reserveField.purpose,
-                  reserveField.numOfPeople);
-
-              await FirebaseFirestore.instance
-                  .collection('users')
-                  .doc(FirebaseAuth.instance.currentUser!.uid)
-                  .collection('reservations')
-                  .doc()
-                  .set({
-                'place': reserveField.place,
-                'date': reserveField.date,
-                'startTime': reserveField.startTime,
-                'endTime': reserveField.endTime,
-                'numOfPeople': reserveField.numOfPeople,
-                'purpose': reserveField.purpose,
-                'uid': FirebaseAuth.instance.currentUser!.uid,
-              });
-              Navigator.of(context).pushReplacementNamed('/reservation_result');
-            } catch (e) {
-              print(e);
-              ScaffoldMessenger.of(context)
-                ..hideCurrentSnackBar()
-                ..showSnackBar(
-                  const SnackBar(content: Text('예약에 실패했어요 다시 시도해주세요')),
-                );
-              Navigator.pop(context);
-            }
-          } else {
+          if(_TimePickerState.selectedTime.isEmpty){
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
               ..showSnackBar(
-                const SnackBar(content: Text('예약에 실패했어요 다시 시도해주세요')),
+                const SnackBar(content: Text('시간을 선택해주세요')),
               );
-            Navigator.pop(context);
+          }
+          else if (_ReservationFormState._formKey.currentState!.validate()) {
+            reserveField.setPlace(room!.place);
+            _TimePickerState.selectedTime.sort();
+            reserveField.setStartTime(_TimePickerState.selectedTime.first);
+            reserveField.setEndTime(_TimePickerState.selectedTime.last);
+
+            await reservationServices.addReservation(
+                reserveField.roomId,
+                FirebaseAuth.instance.currentUser!.uid,
+                reserveField.startTime,
+                reserveField.endTime,
+                reserveField.purpose,
+                reserveField.numOfPeople);
+
+            await reservation
+                .reserveRoom(
+              reserveField.place,
+              reserveField.date,
+              reserveField.startTime,
+              reserveField.endTime,
+              reserveField.numOfPeople,
+              reserveField.purpose,
+            )
+                .then(
+                  (reservationStatus) {
+                if (reservationStatus == ReservationStatus.success) {
+                  Navigator.of(context)
+                      .pushReplacementNamed('/reservation_result');
+                } else {
+                  ScaffoldMessenger.of(context)
+                    ..hideCurrentSnackBar()
+                    ..showSnackBar(
+                      const SnackBar(content: Text('예약에 실패했어요 다시 시도해주세요')),
+                    );
+                }
+              },
+            );
           }
         },
         child: Text(

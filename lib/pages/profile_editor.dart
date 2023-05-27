@@ -27,7 +27,7 @@ class _ProfileEditorPageState extends State<ProfileEditorPage> {
         .get()
         .then(
       (snapshot) {
-        if (snapshot.exists) {
+        if (mounted) {
           setState(() {
             email = snapshot.data()!['email'];
             name = snapshot.data()!['name'];
