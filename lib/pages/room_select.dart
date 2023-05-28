@@ -150,6 +150,9 @@ class _RoomSelectPageState extends State<RoomSelectPage> {
       body: FutureBuilder<List<Room>>(
         future: rooms,
         builder: (context, snapshot) {
+          if(!snapshot.hasData){
+            return const Center(child: CircularProgressIndicator());
+          }
           List<Room>rooms = snapshot.requireData;
           return SafeArea(
             bottom: false,
