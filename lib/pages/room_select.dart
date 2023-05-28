@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:today_my_school/data/room.dart';
+import 'package:today_my_school/data/roomtimedto.dart';
 import 'package:today_my_school/pages/reservation_form.dart';
+import 'package:today_my_school/services/room_services.dart';
 import 'package:today_my_school/style.dart';
+
+import '../services/reservation_services.dart';
 
 class RoomSelectPage extends StatefulWidget {
   const RoomSelectPage({super.key});
@@ -12,9 +16,24 @@ class RoomSelectPage extends StatefulWidget {
   State<RoomSelectPage> createState() => _RoomSelectPageState();
 }
 
+
 class _RoomSelectPageState extends State<RoomSelectPage> {
   String _selectedDate =
       DateFormat('yyyy-MM-dd (E)', 'ko_KR').format(DateTime.now());
+
+  Future<List<Room>>? rooms;
+  RoomServices roomServices = RoomServices();
+
+  ReservationServices reservationServices=ReservationServices();
+  Future<List<Map>>? timeList1;
+  Future<List<Map>>? timeList2;
+  Future<List<Map>>? timeList3;
+  Future<List<Map>>? timeList4;
+  Future<List<Map>>? timeList5;
+  Future<List<Map>>? timeList6;
+  Future<List<Map>>? timeList7;
+  Future<List<Map>>? timeList8;
+  Future<List<Map>>? timeList9;
 
   Future _selectDate() async{
     final DateTime? selected = await showDatePicker(
@@ -41,6 +60,82 @@ class _RoomSelectPageState extends State<RoomSelectPage> {
       });
     }
   }
+
+
+  // Future setAllList() async{
+  //   rooms[0].setAvailable((await timeList1)!);
+  //   rooms[1].setAvailable((await timeList2)!);
+  //   rooms[2].setAvailable((await timeList3)!);
+  //   rooms[3].setAvailable((await timeList4)!);
+  //   rooms[4].setAvailable((await timeList5)!);
+  //   rooms[5].setAvailable((await timeList6)!);
+  //   rooms[6].setAvailable((await timeList7)!);
+  //   rooms[7].setAvailable((await timeList8)!);
+  //   rooms[8].setAvailable((await timeList9)!);
+  //
+  //   print("setAllList!!!");
+  //   print("========");
+  //   print(rooms[0].isAvailable[0]);
+  //   print("========");
+  //   print(timeList1);
+  // }
+
+  @override
+  void initState(){
+    // TODO: implement initState
+    super.initState();
+    timeList1 = reservationServices.getRoomTime(1,_selectedDate);
+    timeList2 = reservationServices.getRoomTime(2,_selectedDate);
+    timeList3 = reservationServices.getRoomTime(3,_selectedDate);
+    timeList4 = reservationServices.getRoomTime(4,_selectedDate);
+    timeList5 = reservationServices.getRoomTime(5,_selectedDate);
+    timeList6 = reservationServices.getRoomTime(6,_selectedDate);
+    timeList7 = reservationServices.getRoomTime(7,_selectedDate);
+    timeList8 = reservationServices.getRoomTime(8,_selectedDate);
+    timeList9 = reservationServices.getRoomTime(9,_selectedDate);
+
+    rooms = roomServices.setRooms(
+      timeList1,
+      timeList2,
+      timeList3,
+      timeList4,
+      timeList5,
+      timeList6,
+      timeList7,
+      timeList8,
+      timeList9
+    );
+
+    //setAllList();
+    }
+
+    @override
+  void setState(VoidCallback fn) {
+    // TODO: implement setState
+    super.setState(fn);
+    timeList1 = reservationServices.getRoomTime(1,_selectedDate);
+    timeList2 = reservationServices.getRoomTime(2,_selectedDate);
+    timeList3 = reservationServices.getRoomTime(3,_selectedDate);
+    timeList4 = reservationServices.getRoomTime(4,_selectedDate);
+    timeList5 = reservationServices.getRoomTime(5,_selectedDate);
+    timeList6 = reservationServices.getRoomTime(6,_selectedDate);
+    timeList7 = reservationServices.getRoomTime(7,_selectedDate);
+    timeList8 = reservationServices.getRoomTime(8,_selectedDate);
+    timeList9 = reservationServices.getRoomTime(9,_selectedDate);
+
+    rooms = roomServices.setRooms(
+        timeList1,
+        timeList2,
+        timeList3,
+        timeList4,
+        timeList5,
+        timeList6,
+        timeList7,
+        timeList8,
+        timeList9
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,81 +147,88 @@ class _RoomSelectPageState extends State<RoomSelectPage> {
           style: TextStyle(color: ColorPalette.white),
         ),
       ),
-      body: SafeArea(
-        bottom: false,
-        child: Center(
-          child: Stack(
-            alignment: AlignmentDirectional.topCenter,
-            clipBehavior: Clip.none,
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width,
-                height: 154.h,
-                decoration: const BoxDecoration(
-                  color: ColorPalette.blue,
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.zero,
-                    bottom: Radius.circular(50),
+      body: FutureBuilder<List<Room>>(
+        future: rooms,
+        builder: (context, snapshot) {
+          List<Room>rooms = snapshot.requireData;
+          return SafeArea(
+            bottom: false,
+            child: Center(
+              child: Stack(
+                alignment: AlignmentDirectional.topCenter,
+                clipBehavior: Clip.none,
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 154.h,
+                    decoration: const BoxDecoration(
+                      color: ColorPalette.blue,
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.zero,
+                        bottom: Radius.circular(50),
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              Positioned(
-                child: Column(
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        _selectDate();
-                      },
-                      child: Container(
-                        width: 280.w,
-                        height: 32.h,
-                        margin: EdgeInsets.fromLTRB(0, 8.h, 0, 16.h),
-                        decoration: BoxDecoration(
-                          color: ColorPalette.white.withOpacity(0.7),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Icon(
-                              Icons.calendar_month_rounded,
-                              size: 24,
+                  Positioned(
+                    child: Column(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            _selectDate();
+                          },
+                          child: Container(
+                            width: 280.w,
+                            height: 32.h,
+                            margin: EdgeInsets.fromLTRB(0, 8.h, 0, 16.h),
+                            decoration: BoxDecoration(
+                              color: ColorPalette.white.withOpacity(0.7),
+                              borderRadius: BorderRadius.circular(15),
                             ),
-                            Text(
-                              ' $_selectedDate',
-                              style: TextStyleSet.medium15,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(
+                                  Icons.calendar_month_rounded,
+                                  size: 24,
+                                ),
+                                Text(
+                                  ' $_selectedDate',
+                                  style: TextStyleSet.medium15,
+                                ),
+                              ],
                             ),
-                          ],
+                          ),
                         ),
-                      ),
+                        Expanded(
+                          child: ListView.separated(
+                            padding: EdgeInsets.symmetric(horizontal: 40.w),
+                            separatorBuilder: (context, index) {
+                              return SizedBox(
+                                height: 16.h,
+                              );
+                            },
+                            itemCount: 9,
+                            itemBuilder: (context, index) {
+                              return ReservationStatusCard(
+                                place: rooms[index].place,
+                                location: rooms[index].location,
+                                maxCapacity: rooms[index].maxCapacity,
+                                image: rooms[index].image,
+                                isAvailable: rooms[index].isAvailable,
+                                index: index,
+                                room: rooms[index]
+                              );
+                            },
+                          ),
+                        ),
+                      ],
                     ),
-                    Expanded(
-                      child: ListView.separated(
-                        padding: EdgeInsets.symmetric(horizontal: 40.w),
-                        separatorBuilder: (context, index) {
-                          return SizedBox(
-                            height: 16.h,
-                          );
-                        },
-                        itemCount: rooms.length,
-                        itemBuilder: (context, index) {
-                          return ReservationStatusCard(
-                            place: rooms[index].place,
-                            location: rooms[index].location,
-                            maxCapacity: rooms[index].maxCapacity,
-                            image: rooms[index].image,
-                            isAvailable: rooms[index].isAvailable,
-                            index: index,
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
+            ),
+          );
+        }
       ),
     );
   }
@@ -139,6 +241,7 @@ class ReservationStatusCard extends StatefulWidget {
   final String image;
   List isAvailable;
   final int index;
+  Room room;
 
   ReservationStatusCard({
     super.key,
@@ -148,6 +251,7 @@ class ReservationStatusCard extends StatefulWidget {
     required this.image,
     required this.isAvailable,
     required this.index,
+    required this.room
   });
 
   @override
@@ -160,7 +264,8 @@ class _ReservationStatusCardState extends State<ReservationStatusCard> {
     return GestureDetector(
       onTap: () {
         Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => ReservationForm(room: rooms[widget.index])));
+            //builder: (context) => ReservationForm(room: rooms[widget.index])));
+            builder: (context) => ReservationForm(room: widget.room)));
         //Navigator.of(context).pushNamed('/reservation_form',arguments: ReservationForm(room: rooms[widget.index]));
       },
       child: Container(
@@ -234,14 +339,15 @@ class _ReservationStatusCardState extends State<ReservationStatusCard> {
                         color: ColorPalette.grey.withOpacity(0.7),
                       ),
                     );
+                  }else{
+                    return Container(
+                      width: 28.w,
+                      height: 4.h,
+                      decoration: const BoxDecoration(
+                        color: ColorPalette.green,
+                      ),
+                    );
                   }
-                  return Container(
-                    width: 28.w,
-                    height: 4.h,
-                    decoration: const BoxDecoration(
-                      color: ColorPalette.green,
-                    ),
-                  );
                 },
               ),
             ),

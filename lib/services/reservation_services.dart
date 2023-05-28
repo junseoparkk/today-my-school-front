@@ -7,6 +7,7 @@ import 'package:today_my_school/data/reservation2.dart';
 import 'package:today_my_school/data/roomtimedto.dart';
 
 import '../data/myreservation.dart';
+import '../data/room.dart';
 import '../data/user.dart';
 import 'globals.dart';
 
@@ -80,7 +81,7 @@ class ReservationServices {
     return MyReservation.fromMap(data);
   }
 
-  Future<List<RoomTimeDto>> getRoomTime(int roomId, String date) async{
+  Future<List<Map>> getRoomTime(int roomId, String date) async{
     var url = Uri.parse(baseURL + '/room/${roomId}/date/${date}');
 
     http.Response response = await http.get(
@@ -92,11 +93,13 @@ class ReservationServices {
     );
 
     List<dynamic> body = json.decode(utf8.decode(response.bodyBytes));
-    List<RoomTimeDto> roomTimeDto = body.map((dynamic data) =>
-        RoomTimeDto.fromMap(data)).toList();
+    List<Map> roomTimeDto = body.map((dynamic data) =>
+      RoomTimeDto.fromMapToMap(data)).toList();
+    // List<RoomTimeDto> roomTimeDto = body.map((dynamic data) =>
+    //     RoomTimeDto.fromMap(data)).toList();
 
-    for(RoomTimeDto t in roomTimeDto)
-      print({t.index,t.possible});
+    // for(RoomTimeDto t in roomTimeDto)
+    //   print({t.index,t.isReserved});
 
     return roomTimeDto;
   }
