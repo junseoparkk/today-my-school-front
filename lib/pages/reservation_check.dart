@@ -55,15 +55,16 @@ class _ReservationCheckPageState extends State<ReservationCheckPage> {
                   },
                   itemCount: snapshot.data!.length,
                   itemBuilder: (context, index) {
-                    // if (reservations[index].startTime.isBefore(DateTime.now())) {
-                    //   return OverdueCard(
-                    //     place: reservations[index].place,
-                    //     date: reservations[index].date,
-                    //     startTime: reservations[index].startTime,
-                    //     endTime: reservations[index].endTime,
-                    //     numOfPeople: reservations[index].numOfPeople,
-                    //   );
-                    // }
+                    if (DateTime.parse(snapshot.data![index].startTime.toString()).isBefore(DateTime.now())) {
+                      return OverdueCard(
+                        place: snapshot.data![index].roomName.toString(),
+                        date: DateTime.parse(snapshot.data![index].startTime.toString()),
+                        startTime: DateTime.parse(snapshot.data![index].startTime.toString()),
+                        endTime: DateTime.parse(snapshot.data![index].endTime.toString()),
+                        numOfPeople: snapshot.data![index].memberNum ?? 0,
+                        //reservationToken: snapshot.data![index].reservationToken.toString(),
+                      );
+                    }
                     return ReservationCard(
                       place: snapshot.data![index].roomName.toString(),
                       date: DateTime.parse(snapshot.data![index].startTime.toString()),
