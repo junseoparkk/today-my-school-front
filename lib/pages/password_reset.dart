@@ -109,7 +109,7 @@ class _PasswordResetPageState extends State<PasswordResetPage> {
                             ..showSnackBar(
                               const SnackBar(content: Text('메일을 보냈어요')),
                             );
-                          Navigator.pushReplacementNamed(context, '/home');
+                          Navigator.pushReplacementNamed(context, '/login');
                         } else {
                           ScaffoldMessenger.of(context)
                             ..hideCurrentSnackBar()

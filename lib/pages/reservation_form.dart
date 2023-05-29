@@ -393,7 +393,10 @@ class _TimePickerState extends State<TimePicker> {
                   child: Center(
                     child: Text(
                       widget.room!.isAvailable[index]['time'],
-                      style: TextStyleSet.regular13,
+                      style:  selectedTime
+                          .contains(widget.room!.isAvailable[index]['time'])
+                          ? TextStyleSet.regular13.copyWith(color: ColorPalette.white)
+                          : TextStyleSet.regular13,
                     ),
                   ),
                 ),
@@ -695,7 +698,7 @@ class NumOfPeopleInput extends StatelessWidget {
               if (numOfPeople!.trim().isEmpty) {
                 return '이용 인원을 입력하세요';
               }
-              if (int.parse(numOfPeople) > 4) {
+              if (int.parse(numOfPeople) > room!.maxCapacity) {
                 return '최대 이용 인원을 초과했습니다';
               }
               return null;
