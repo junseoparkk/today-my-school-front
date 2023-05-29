@@ -7,17 +7,28 @@ import 'package:today_my_school/data/reservation.dart';
 import 'package:today_my_school/style.dart';
 
 class ReservationResultPage extends StatefulWidget {
-  const ReservationResultPage({super.key});
+  const ReservationResultPage({
+    super.key,
+    this.date,
+    this.place,
+    this.startTime,
+    this.endTime,
+    });
 
+  final DateTime? date;
+  final String? place;
+  final String? startTime;
+  final String? endTime;
+  
   @override
   State<ReservationResultPage> createState() => _ReservationResultPageState();
 }
 
 class _ReservationResultPageState extends State<ReservationResultPage> {
-  final String _place = reservations[0].place;
-  final DateTime _date = reservations[0].date;
-  final DateTime _startTime = reservations[0].startTime;
-  final DateTime _endTime = reservations[0].endTime;
+  // final String _place = reservations[0].place;
+  // final DateTime _date = reservations[0].date;
+  // final DateTime _startTime = reservations[0].startTime;
+  // final DateTime _endTime = reservations[0].endTime;
   String _name = '';
   String _phone = '';
 
@@ -119,7 +130,8 @@ class _ReservationResultPageState extends State<ReservationResultPage> {
                                           ),
                                         ),
                                         Text(
-                                          _place,
+                                          widget.place!,
+                                          //_place,
                                           style: TextStyleSet.medium15,
                                         ),
                                       ],
@@ -138,7 +150,7 @@ class _ReservationResultPageState extends State<ReservationResultPage> {
                                           ),
                                         ),
                                         Text(
-                                          '${DateFormat('yyyy년 M월 d일 EEEE', 'ko_KR').format(_date)}\n${DateFormat('HH:mm').format(_startTime)} - ${DateFormat('HH:mm').format(_endTime)}',
+                                          '${DateFormat('yyyy년 M월 d일 EEEE', 'ko_KR').format(widget.date!)}\n${DateFormat('HH:mm').format(DateTime.parse(widget.startTime!))} - ${DateFormat('HH:mm').format(DateTime.parse(widget.endTime!))}',
                                           style: TextStyleSet.medium15,
                                         ),
                                       ],

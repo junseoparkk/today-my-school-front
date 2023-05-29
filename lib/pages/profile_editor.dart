@@ -73,7 +73,7 @@ class _ProfileEditorPageState extends State<ProfileEditorPage> {
                   ..showSnackBar(
                     const SnackBar(content: Text('로그아웃 완료!')),
                   );
-                Navigator.of(context).pushReplacementNamed('/login');
+                Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
               },
               icon: const Icon(
                 Icons.logout_rounded,

@@ -7,6 +7,7 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:today_my_school/models/model_reservation.dart';
 import 'package:today_my_school/models/model_reserve.dart';
 import 'package:today_my_school/data/room.dart';
+import 'package:today_my_school/pages/reservation_result.dart';
 import 'package:today_my_school/services/reservation_services.dart';
 import 'package:today_my_school/style.dart';
 
@@ -326,6 +327,7 @@ class TimePicker extends StatefulWidget {
 
   @override
   State<TimePicker> createState() => _TimePickerState();
+
 }
 
 class _TimePickerState extends State<TimePicker> {
@@ -374,7 +376,7 @@ class _TimePickerState extends State<TimePicker> {
                     selectedTime
                         .remove(widget.room!.isAvailable[index]['time']);
                     //print(selectedTime);
-                  } else if (selectedTime.length < 2) {
+                  } else if (selectedTime.length < 1) {
                     selectedTime.add(widget.room!.isAvailable[index]['time']);
                     //print(selectedTime);
                   }
@@ -855,6 +857,11 @@ class ReserveButton extends StatelessWidget {
             reserveField.setEndTime(_TimePickerState.selectedTime.last);
             reserveField.setRoomId(room!.roomId);
 
+            String place = room!.place;
+            DateTime date = reserveField.date;
+            String sTime = reserveField.startTime;
+            String eTime = reserveField.endTime;
+
             await reservationServices.addReservation(
                 reserveField.roomId,
                 FirebaseAuth.instance.currentUser!.uid,
@@ -876,8 +883,10 @@ class ReserveButton extends StatelessWidget {
                   (reservationStatus) {
                 if (reservationStatus == ReservationStatus.success){
 
-                  Navigator.of(context)
-                      .pushReplacementNamed('/reservation_result');
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)
+                    => ReservationResultPage(place:place,date:date,startTime:sTime,endTime:eTime)));
+                      // .of(context)
+                      // .pushReplacementNamed('/reservation_result');
                 } else {
                   ScaffoldMessenger.of(context)
                     ..hideCurrentSnackBar()
