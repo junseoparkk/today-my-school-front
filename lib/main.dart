@@ -4,6 +4,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:today_my_school/firebase_options.dart';
+import 'package:today_my_school/models/model_date.dart';
 import 'package:today_my_school/pages/home.dart';
 import 'package:today_my_school/pages/login.dart';
 import 'package:today_my_school/pages/password_reset.dart';

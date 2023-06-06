@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:today_my_school/models/model_date.dart';
 import 'package:today_my_school/models/model_reservation.dart';
 import 'package:today_my_school/models/model_reserve.dart';
 import 'package:today_my_school/data/room.dart';
@@ -65,8 +66,11 @@ class _ReservationFormState extends State<ReservationForm> {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => ReserveFieldModel(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ReserveFieldModel()),
+        ChangeNotifierProvider(create: (_)=> DateModel()),
+      ],
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: ColorPalette.white,
@@ -234,6 +238,7 @@ class _DatePickerState extends State<DatePicker> {
 
   @override
   Widget build(BuildContext context) {
+    final datePick = Provider.of<DateModel>(context,listen: false);
     final reserveField = Provider.of<ReserveFieldModel>(context, listen: false);
     return ExpansionTile(
       title: const Text('날짜'),
@@ -266,6 +271,7 @@ class _DatePickerState extends State<DatePicker> {
               this.focusedDay = selectedDay;
             });
             reserveField.setDate(selectedDay);
+            datePick.setDate(selectedDay);
           },
           selectedDayPredicate: (day) =>
               day.year == selectedDay.year &&
@@ -336,6 +342,17 @@ class _TimePickerState extends State<TimePicker> {
   @override
   Widget build(BuildContext context) {
     final reserveField = Provider.of<ReservationModel>(context, listen: false);
+    final datePick = Provider.of<DateModel>(context,listen: false);
+
+    ReservationServices reservationServices=ReservationServices();
+    Future<List<Map>>? timeList;
+
+    void setTime()async{
+      ReservationServices reservationServices=ReservationServices();
+      Future<List<Map>>? timeList;
+
+      widget.room!.isAvailable = await reservationServices.getRoomTime(widget.room!.roomId, datePick.date.toString());
+    }
 
     return ExpansionTile(
       title: const Text('시간'),
@@ -352,6 +369,7 @@ class _TimePickerState extends State<TimePicker> {
             scrollDirection: Axis.horizontal,
             itemCount: widget.room!.isAvailable.length,
             itemBuilder: (context, index) {
+              setTime();
               if (widget.room!.isAvailable[index]['isReserved']) {
                 return Container(
                   width: 100.w,
